@@ -76,37 +76,43 @@ for distrito in distritos:
     print distrito
     page = 1
     site = "https://www.idealista.pt/comprar-casas/" + distrito + "-distrito/pagina-" + str(page)
-    print site
     d = pq(url=site)
+    print site
 
-    nth = 1
+    still_ads = True
 
-    print d('article:nth-of-type(45)') == ''
 
-    exit()
 
-    while(d('article:nth-of-type(' + str(nth) + ')') != None or d('article:nth-of-type(' + str(nth) + ')') != ''):
+    while(d('article:nth-of-type(1)').text() != ''):
+        site = "https://www.idealista.pt/comprar-casas/" + distrito + "-distrito/pagina-" + str(page)
+        print "Page:" + str(page)
+        d = pq(url=site)
 
-        if(d('article:nth-of-type(' + str(nth) + ') div').attr('data-adid') == None):
+        nth = 1
+
+        while(d('article:nth-of-type(' + str(nth) + ')').text() != ''):
+
+            if(d('article:nth-of-type(' + str(nth) + ') div').attr('data-adid') == None):
+                nth = nth + 1
+                print "jump"
+                continue
+
+            ad1 = idealistaAdList()
+            ad1.getData(nth)
+
+            print(str(nth) + ":")
+
+            print ad1.id
+            print ad1.tipo
+            #print ad1.freguesia
+            print ad1.concelho
+            print ad1.topologia
+            print ad1.link
+            #print ad1.morada
+            print '\n\n'
             nth = nth + 1
-            print "jump"
-            continue
 
-        ad1 = idealistaAdList()
-        ad1.getData(nth)
-
-        print(str(nth) + ":")
-
-        print ad1.id
-        print ad1.tipo
-        #print ad1.freguesia
-        print ad1.concelho
-        print ad1.topologia
-        print ad1.link
-        #print ad1.morada
-        print '\n\n'
-        nth = nth + 1
-
+        page = page + 1
 
 #    page1 = idealistaPage('https://www.google.com')
 #    page1.getData()
